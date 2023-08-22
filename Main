@@ -1,0 +1,123 @@
+from tkinter import *
+import random
+import string
+from tkinter import messagebox
+from Hangman_drawing import HANGMAN_PICS
+from Zodynas import zodziai as z
+
+
+class Pagrindinis:
+    def __init__(self, master):
+        self.master = master
+        self.frame = Frame(self.master)
+        self.button_1 = Button(self.frame, text='New game', width=25, command=self.zaidimas)
+        self.button_2 = Button(self.frame, text='High score', width=25, command=self.high_score)
+        self.button_3 = Button(self.frame, text='Quit game', width=25, command=self.isjungti)
+        self.frame.grid()
+        self.button_1.grid(row=0, column=0, pady=10, padx=10)
+        self.button_2.grid(row=1, column=0, pady=10, padx=10)
+        self.button_3.grid(row=2, column=0, pady=10, padx=10)
+
+    def zaidimas(self):
+        self.naujas_langas = Toplevel(self.master)
+        Zaidimo_langas(self.naujas_langas)
+
+    def high_score(self):
+        self.naujas_langas = Toplevel(self.master)
+        High_score(self.naujas_langas)
+
+    def isjungti(self):
+        self.master.destroy()
+
+
+class Zaidimo_langas:
+    def __init__(self, master):
+        self.master = master
+        self.frame = Frame(self.master)
+        self.frame.grid()
+
+        self.zodziai = z
+        self.zodis = random.choice(self.zodziai).upper()
+        self.raides = set(self.zodis)
+        self.alphabet = set(string.ascii_uppercase)
+        self.panaudotos_raides = set()
+        self.max_attempts = 6
+        self.attempts = 0
+
+        self.button_1 = Button(self.frame, text='Exit', width=25, command=self.isjungti)
+        self.button_2 = Button(self.frame, text='Speti', width=25, command=self.spejimu_tikrinimas)
+        self.spejamas_zodis = Label(self.frame, text=' ', font='Arial')
+        self.hangman_pic = Label(self.frame, text=HANGMAN_PICS[0], font='Arial')
+        self.spetos_raides = Label(self.frame, text=' ')
+        self.spetos_raides_text = Label(self.frame, text='Spetos raides:')
+        self.zinute = Label(self.frame, text=' ')
+        self.spejama_raide = Entry(self.frame, border=1)
+
+        self.hangman_pic.grid(row=0, columnspan=8)
+        self.spejamas_zodis.grid(row=1, columnspan=8, )
+        self.zinute.grid(row=2, column=0, columnspan=3)
+        self.spetos_raides.grid(row=3, column=1)
+        self.spetos_raides_text.grid(row=3, column=0)
+        self.spejama_raide.grid(row=4, column=1, columnspan=3)
+        self.button_2.grid(row=5, column=0, columnspan=2, pady=10, padx=10)
+        self.button_1.grid(row=5, column=3, columnspan=2, pady=10, padx=10)
+
+    def isjungti(self):
+        self.master.destroy()
+
+    def display_word(self):
+        word_list = [letter if letter in self.panaudotos_raides else ' _ ' for letter in self.zodis]
+        return ' '.join(word_list)
+
+    def spejimu_tikrinimas(self):
+        spejimas = self.spejama_raide.get().upper()
+        self.spejama_raide.delete(0, END)
+
+        if spejimas in self.alphabet - self.panaudotos_raides:
+            self.panaudotos_raides.add(spejimas)
+            if spejimas in self.raides:
+                self.raides.remove(spejimas)
+            else:
+                self.attempts += 1
+                self.hangman_pic.config(text=HANGMAN_PICS[self.attempts])
+                if self.attempts >= self.max_attempts:
+                    self.pabaiga(False)
+
+        self.spetos_raides.config(text=', '.join(self.panaudotos_raides))
+        self.spejamas_zodis.config(text=self.display_word())
+
+        if len(self.raides) == 0:
+            self.pabaiga(True)
+
+    def pabaiga(self, win):
+        if win:
+            messagebox.showinfo("Game Over", "Congratulations! You guessed the word.")
+        else:
+            messagebox.showinfo("Game Over", f"Sorry, you ran out of attempts. The word was: {self.zodis}")
+        self.isjungti()
+
+
+class High_score:
+    def __init__(self, master):
+        self.master = master
+        self.frame = Frame(self.master)
+        self.back = Button(self.master, text='Back', command=self.isjungti)
+        self.lable_1 = Label(self.master, text='High score')
+        self.lable_2 = Label(self.master, text='V - 50')
+        self.frame.pack()
+        self.lable_1.pack()
+        self.lable_2.pack()
+        self.back.pack()
+
+    def isjungti(self):
+        self.master.destroy()
+
+
+def main():
+    langas = Tk()
+    Pagrindinis(langas)
+    langas.mainloop()
+
+
+if __name__ == '__main__':
+    main()
