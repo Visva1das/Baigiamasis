@@ -1,0 +1,41 @@
+HANGMAN_PICS = ['''
+   +---+
+        |
+        |
+        |
+       ===''', '''
+    +---+
+   O    |
+        |
+        |
+       ===''', '''
+   +---+
+   O   |
+   |   |
+       |
+      ===''', '''
+   +---+
+   O   |
+  /|   |
+       |
+      ===''', '''
+   +---+
+   O   |
+  /|\  |
+       |
+      ===''', '''
+   +---+
+   O   |
+  /|\  |
+  /    |
+      ===''', '''
+   +---+
+   O   |
+  /|\  |
+  / \  |
+      ===''']
+
+zodziai = ["Python", "Hangman", "Computer", "Programming", "Language",
+    "Keyboard", "Internet", "Developer", "Algorithm", "Variable",
+    "Function", "Loop", "Debugging", "Interface", "Software",
+    "Framework", "Database", "Console", "Syntax", "Exception"]
