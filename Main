@@ -2,9 +2,7 @@ from tkinter import *
 import random
 import string
 from tkinter import messagebox
-from Hangman_drawing import HANGMAN_PICS
-from Zodynas import zodziai as z
-
+from Hangman_drawing import HANGMAN_PICS, zodziai as z
 
 class Pagrindinis:
     def __init__(self, master):
